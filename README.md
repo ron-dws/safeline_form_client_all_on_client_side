@@ -1,7 +1,7 @@
 # safeline_form_client_all_on_client_side
 ->Use for Demo
 ->Dynamic form to give a glass repair quote based on users inputs.
-->Technology: HTML5, CSS3, BOOTSTRAP4, JAVASCRIPT, JQUERY
+->Technology: HTML5, CSS3, BOOTSTRAP4, JAVASCRIPT, JQUERY, SVG (logo)
 ->All is running on the client side
 ->I use cookies to hold data or to allow the system to remember user choice before final process
 ->All views (different windows -> steps) is on the same page

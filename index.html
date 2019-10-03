@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Safelite Quote Sample Front End</title>
+
+	<link rel="icon" type="image/png" href="img/safeline_tab_logo.png">
+    <!--Font awesome cdn-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!--Bootstrap 4 cdn-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        html {
+        height: 100%;
+        }
+        body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh; /* Avoid the IE 10-11 `min-height` bug. */
+        margin: 0;
+        font-size: 16px;
+        }
+        .row.header1{
+            font-size:38px;
+            margin-top:20px;
+        }
+        #logo_main{
+            background-image: url(https://www.safelite.com/assets/images/safelite-logo.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            padding:20px;
+            margin-left:30px;
+        }
+       /* .content_main {
+        flex: 1 0 auto;  Prevent Chrome, Opera, and Safari from letting these items shrink to smaller than their content's default minimum size. 
+        padding: 20px;
+        }
+        
+        * {
+        box-sizing: border-box;
+        }
+        .footer {
+        flex-shrink: 0;  Prevent Chrome, Opera, and Safari from letting these items shrink to smaller than their content's default minimum size. 
+        padding: 20px;
+        background: rgba(212, 213, 214, 0.19);
+        color: rgb(108, 104, 104);
+        font-size: 16px;
+        } */
+
+        .content_main{
+          min-height: calc(100vh - 70px);
+          padding: 40px 40px 0 40px;
+        }
+        * {
+        box-sizing: border-box;
+        }
+        .footer {
+          height: 80px;
+          padding: 20px;
+        background: rgba(212, 213, 214, 0.19);
+        color: rgb(108, 104, 104);
+        font-size: 16px;
+        }
+
+
+        a{
+            text-decoration: none;
+        }
+
+        a.a_footer{
+            text-decoration: none;
+            color:rgba(122, 110, 110, 0.91);
+        }
+
+      input[type="email"]
+      {
+          border-top:1px solid blue;
+      }
+      input[type="select"]:focus{
+          background-color:firebrick;
+      }
+      .select_screen1{
+        border-top:none; border-left:none; border-right:none; border-bottom-color: firebrick; margin-bottom:5px;
+      }
+      .form-control:focus {
+        border-color: #FF0000;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+      }
+
+      /*For my profile*/
+      #contact_me {
+        display: inline-block;
+        padding: 0 25px;
+        max-width: 200px;
+        margin-top:10px;
+        margin-left:20px;
+        height: 50px;
+        font-size: 16px;
+        color:#ffffff;
+        border-radius: 25px;
+        background-color:  rgba(235, 7, 78, 0.94); /*rgba(183, 16, 68, 0.94);*/
+      }
+
+      #contact_me img {
+        float: left;
+        margin: 0 10px 0 -25px;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+      }
+
+      #contact_me img a{
+        text-decoration: none;
+      }
+
+      /*For the loader -> pre page display*/
+      #loader {
+			  position: absolute;
+			  left: 50%;
+			  top: 50%;
+			  z-index: 1;
+			  width: 150px;
+			  height: 150px;
+			  margin: -75px 0 0 -75px;
+			  border: 16px solid  #d890cc;
+			  border-radius: 50%;
+			  border-top: 16px solid #f1062d;
+			  width: 120px;
+			  height: 120px;
+			  -webkit-animation: spin 2s linear infinite;
+			  animation: spin 2s linear infinite;
+			}
+
+			@-webkit-keyframes spin {
+			  0% { -webkit-transform: rotate(0deg); }
+			  100% { -webkit-transform: rotate(360deg); }
+			}
+
+			@keyframes spin {
+			  0% { transform: rotate(0deg); }
+			  100% { transform: rotate(360deg); }
+			}
+
+			/* Add animation to "page content" */
+			.animate-bottom {
+			  position: relative;
+			  -webkit-animation-name: animatebottom;
+			  -webkit-animation-duration: 1s;
+			  animation-name: animatebottom;
+			  animation-duration: 1s
+			}
+
+			@-webkit-keyframes animatebottom {
+			  from { bottom:-100px; opacity:0 } 
+			  to { bottom:0px; opacity:1 }
+			}
+
+			@keyframes animatebottom { 
+			  from{ bottom:-100px; opacity:0 } 
+			  to{ bottom:0; opacity:1 }
+			}
+
+			#myDiv {
+			  display: none;
+			  text-align: center;
+			}
+
+
+    </style>
+    <script>
+        //Event when car make is selected
+        function car_make_selected(make){
+          var estimate_dis = document.getElementById("estimate_dis");
+          var modelFord = document.getElementById("car_model_ford");
+          var modelToyota = document.getElementById("car_model_toyota");
+          var modelHonda = document.getElementById("car_model_honda");
+
+              estimate_dis.innerHTML = ""; //to clear estimate 
+          var dis_logo_img = document.getElementById("car_pic");
+
+          //alert("Yes");
+          if(make == "Ford")
+          {
+            // alert("You selected a ford");
+             dis_logo_img.src = "img/car_logo/ford_logo.png";
+
+             modelFord.style.display = "inline-block";
+             modelToyota.style.display = "none";
+             modelHonda.style.display = "none";
+          }else if(make == "Toyota"){
+             //alert("You selected a Toyota");
+             dis_logo_img.src = "img/car_logo/toyota_logo.png";
+
+             modelFord.style.display = "none";
+             modelToyota.style.display = "inline-block";
+             modelHonda.style.display = "none";
+          }else if(make == "Honda"){
+             //alert("You selected a Honda");
+             dis_logo_img.src = "img/car_logo/honda_logo.png";
+             
+             modelToyota.style.display = "none";
+             modelFord.style.display = "none";
+             modelHonda.style.display = "inline-block";
+          }
+
+        } 
+
+        //Image changes based on model selected
+        function toyota_model_selected(val){
+          var estimate_dis = document.getElementById("estimate_dis");
+          var dis_logo_img = document.getElementById("car_pic");
+          var get_year = document.getElementById("car_year").value;
+          //alert(get_year+","+val);
+          if(val == "yaris" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$455</h3>";
+            dis_logo_img.src = "img/car_models/toyota_models_pics/yaris_2018.png";
+          }else if (val == "yaris" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$299</h3>";
+            dis_logo_img.src = "img/car_models/toyota_models_pics/yaris_2019.png";
+          }
+
+          if(val == "corolla" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$455</h3>";
+            dis_logo_img.src = "img/car_models/toyota_models_pics/corolla_2018.png";
+          }else if (val == "corolla" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$299</h3>";
+            dis_logo_img.src = "img/car_models/toyota_models_pics/corolla_2019.png";
+          }
+
+          if(val == "rav4" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$455</h3>";
+            dis_logo_img.src = "img/car_models/toyota_models_pics/rav4_2018.png";
+          }else if (val == "rav4" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$299</h3>";
+            dis_logo_img.src = "img/car_models/toyota_models_pics/rav4_2019.png";
+          }
+
+        }
+
+        //ford model selected
+        function ford_model_selected(val){
+          var estimate_dis = document.getElementById("estimate_dis");
+          var dis_logo_img = document.getElementById("car_pic");
+          var get_year = document.getElementById("car_year").value;
+          //alert(get_year+","+val);
+          if(val == "ecosport" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$550</h3>";
+            dis_logo_img.src = "img/car_models/ford_models_pics/ecosport_2018.png";
+          }else if (val == "ecosport" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$600</h3>";
+            dis_logo_img.src = "img/car_models/ford_models_pics/ecosport_2019.png";
+          }
+
+          if(val == "escape" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$265</h3>";
+            dis_logo_img.src = "img/car_models/ford_models_pics/escape_2018.png";
+          }else if (val == "escape" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$175</h3>";
+            dis_logo_img.src = "img/car_models/ford_models_pics/escape_2019.png";
+          }
+
+          if(val == "expedition" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$122</h3>";
+            dis_logo_img.src = "img/car_models/ford_models_pics/expedition_2018.png";
+          }else if (val == "expedition" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$250</h3>";
+            dis_logo_img.src = "img/car_models/ford_models_pics/expedition_2019.png";
+          }
+        }
+
+        //honda model selected
+        function honda_model_selected(val){
+          var estimate_dis = document.getElementById("estimate_dis");
+          var dis_logo_img = document.getElementById("car_pic");
+          var get_year = document.getElementById("car_year").value;
+          //alert(get_year+","+val);
+          if(val == "crv" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$789</h3>";
+            dis_logo_img.src = "img/car_models/honda_models_pics/crv_2018.png";
+          }else if (val == "crv" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$850</h3>";
+            dis_logo_img.src = "img/car_models/honda_models_pics/crv_2019.png";
+          }
+
+          if(val == "accord" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$299</h3>";
+            dis_logo_img.src = "img/car_models/honda_models_pics/accord_2018.png";
+          }else if (val == "accord" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$399</h3>";
+            dis_logo_img.src = "img/car_models/honda_models_pics/accord_2019.png";
+          }
+
+          if(val == "civic" && get_year == "2018"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$122</h3>";
+            dis_logo_img.src = "img/car_models/honda_models_pics/civic_2018.png";
+          }else if (val == "civic" && get_year == "2019"){
+            estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$250</h3>";
+            dis_logo_img.src = "img/car_models/honda_models_pics/civic_2019.png";
+          }
+        }
+
+        //Year Changed after the model had been selected
+        function year_changed(val){
+            var get_make = document.getElementById("car_make").value;
+            var estimate_dis = document.getElementById("estimate_dis");
+            var dis_logo_img = document.getElementById("car_pic");
+            //var get_model_h = document.getElementById("model_toyota");
+            
+
+          if(get_make == "Toyota"){
+            var get_model_t = document.getElementById("car_model_toyota").value; 
+              if(val == "2018" && get_model_t == "corolla"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$455</h3>";
+                dis_logo_img.src = "img/car_models/toyota_models_pics/corolla_2018.png";
+                }else if (val == "2019" && get_model_t == "corolla"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$299</h3>";
+                dis_logo_img.src = "img/car_models/toyota_models_pics/corolla_2019.png";
+                }
+
+                if(val == "2018" && get_model_t == "yaris"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$455</h3>";
+                dis_logo_img.src = "img/car_models/toyota_models_pics/yaris_2018.png";
+                }else if (val == "2019" && get_model_t == "yaris"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$299</h3>";
+                dis_logo_img.src = "img/car_models/toyota_models_pics/yaris_2019.png";
+                }
+
+                if(val == "2018" && get_model_t == "rav4"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$455</h3>";
+                dis_logo_img.src = "img/car_models/toyota_models_pics/rav4_2018.png";
+                }else if (val == "2019" && get_model_t == "rav4"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$299</h3>";
+                dis_logo_img.src = "img/car_models/toyota_models_pics/rav4_2019.png";
+                }
+            }else if(get_make == "Honda"){
+              var get_model_h = document.getElementById("car_model_honda").value; 
+              if(val == "2018" && get_model_h == "crv"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$789</h3>";
+                dis_logo_img.src = "img/car_models/honda_models_pics/crv_2018.png";
+              }else if (val == "2019" && get_model_h == "crv"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$850</h3>";
+                dis_logo_img.src = "img/car_models/honda_models_pics/crv_2019.png";
+              }
+
+              if(val == "accord" && get_model_h == "accord"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$299</h3>";
+                dis_logo_img.src = "img/car_models/honda_models_pics/accord_2018.png";
+              }else if (val == "accord" && get_model_h == "accord"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$399</h3>";
+                dis_logo_img.src = "img/car_models/honda_models_pics/accord_2019.png";
+              }
+
+              if(val == "2018" && get_model_h == "civic"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$122</h3>";
+                dis_logo_img.src = "img/car_models/honda_models_pics/civic_2018.png";
+              }else if (val == "2019" && get_model_h == "civic"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$250</h3>";
+                dis_logo_img.src = "img/car_models/honda_models_pics/civic_2019.png";
+              }
+            }else if(get_make == "Ford"){
+              var get_model_f = document.getElementById("car_model_ford").value; 
+              if(val == "2018" && get_model_f == "ecosport"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$550</h3>";
+                dis_logo_img.src = "img/car_models/ford_models_pics/ecosport_2018.png";
+              }else if (val == "2019" && get_model_f == "ecosport"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$600</h3>";
+                dis_logo_img.src = "img/car_models/ford_models_pics/ecosport_2019.png";
+              }
+
+              if(val == "2018" && get_model_f == "escape"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$265</h3>";
+                dis_logo_img.src = "img/car_models/ford_models_pics/escape_2018.png";
+              }else if (val == "2019" && get_model_f == "escape"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$175</h3>";
+                dis_logo_img.src = "img/car_models/ford_models_pics/escape_2019.png";
+              }
+
+              if(val == "2018" && get_model_f == "expedition"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$122</h3>";
+                dis_logo_img.src = "img/car_models/ford_models_pics/expedition_2018.png";
+              }else if (val == "2019" && get_model_f == "expedition"){
+                estimate_dis.innerHTML ="<h3>Your Estimate is: <b style='color:green'>$250</h3>";
+                dis_logo_img.src = "img/car_models/ford_models_pics/expedition_2019.png";
+              }
+
+            }
+        }
+        
+    </script>
+</head>
+<body onload="page_load()">
+   <!--Pre loader-->
+    <div id="loader"></div>
+  <div style="display:none;" id="myDiv" class="animate-bottom">
+   <!--End of the pre loader-->
+   <!--Header-->
+   <div class="content_main">
+   <div class="container-fluid">
+       <div class="row header1">
+            <div class="col-md-4" id="logo_main"></div>
+            <div class="col-md-4" id="contact_me"><img src="img/ron.jpg" alt="me" width="96" height="96">  Ronald Wanko (952) 393-6045</div>
+            <div class="col-md-4"></div>
+       </div>
+       <row class="row header2">
+            
+       </row>
+   </div>
+   
+   <!--Content-->
+   
+        <hr/>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12" style="color:rgb(96, 98, 99); font-family: sans-serif; text-align:left;margin-bottom:20px;"><h3>Get a Quote</h3></div>
+            </div>
+        </div>
+        <div class="container-fluid">
+         <div class="row">
+             <div class="col-md-6">
+             <form>
+                        <!--Select Year-->
+                        <select class="form-control select_screen1" id="car_year" oninput="year_changed(this.value)">
+                            <option value="" disabled selected>Select Year</option>
+                            <option value ="2019">2019</option>
+                            <option value="2018">2018</option>
+                        </select><br>
+                        <!--Select Make-->
+                        <select class="form-control select_screen1" id="car_make" oninput="car_make_selected(this.value)">
+                                <option value="" disabled selected>Select Make</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Honda">Honda</option>
+                        </select><br>
+                        <!--Select Ford Model (hide onload)-->
+                        <select class="form-control select_screen1" id="car_model_ford" oninput="ford_model_selected(this.value)">
+                            <option value="" disabled selected>Select Ford Model</option>
+                            <option value="ecosport">EcoSport</option>
+                            <option value="escape">Escape</option>
+                            <option value="expedition">Expedition</option>
+                        </select>
+
+                        <!--Select Toyota Model (hide onload)-->
+                        <select class="form-control select_screen1" id="car_model_toyota" oninput="toyota_model_selected(this.value)">
+                            <option value="" disabled selected>Select Toyota Model</option>
+                            <option value="yaris">Yaris</option>
+                            <option value="corolla">Corolla</option>
+                            <option value="rav4">Rav4</option>
+                        </select>
+                        <!--Select Honda Model (hide onload)-->
+                        <select class="form-control select_screen1" id="car_model_honda" oninput="honda_model_selected(this.value)" >
+                                <option value="" disabled selected>Select Honda Model</option>
+                                <option value="crv">CR-V SUV</option>
+                                <option value="accord">Accord</option>
+                                <option value="civic">Civic</option>
+                        </select>
+                <!-- <div class="form-group">
+                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Password</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                </div> -->
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" onclick="screen1_back()" style="float:left;"><i class="fas fa-angle-left"></i> Back </i></button>
+                  <button type="submit" class="btn btn-primary" onclick="screen1_next()" style="float:right;">Next <i class="fas fa-angle-right"></i></button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-6" style="margin-top:10px;">
+                <p id="estimate_dis"></p>
+                <img id="car_pic" src="" class="img-responsive" alt="car image" width="200px;" height="100px;">
+            </div>
+            
+         </div>
+        </div>
+     </div>
+   <!--Footer-->
+   <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                    <div class="col-md-3"><i>&copy 2019 Safelite Group</i></div>
+                    <div class="col-md-4" style="margin-top:5px;"><i><a class="a_footer" href="#">Terms of use</a> &nbsp; &nbsp;<a class="a_footer" href="#">Privacy policy</a></i></div>
+                    <div class="col-md-5"></div>
+            </div>
+        </div>
+   </footer>
+  
+  <script>
+      var myVar;
+      
+      function page_load(){
+
+           myVar = setTimeout(showPage, 2000); //use to show the preload before displaying the form
+
+          //hide some fields when the page load
+          var modelFord = document.getElementById("car_model_ford");
+          var modelToyota = document.getElementById("car_model_toyota");
+          var modelHonda = document.getElementById("car_model_honda");
+          var dis_logo_img = document.getElementById("car_pic");
+          dis_logo_img.src = "img/glass_icon3.png";
+
+          modelFord.style.display = "none";
+          modelToyota.style.display = "none";
+          modelHonda.style.display = "none";
+
+        }
+
+      //showPage() function for the preload
+      function showPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("myDiv").style.display = "block";
+      }
+</script>
+</body>
+</html>
